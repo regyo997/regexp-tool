@@ -31,7 +31,7 @@ class LeoRegexpApplyTool:
                     regexp, regexpMatch, outputText)
         return outputText
 
-    def _replaceOrNot(self, regexp: List[LeoRegexp], regexpMatch: List[re.Match], inputText: str):
+    def _replaceOrNot(self, regexp: LeoRegexp, regexpMatch: List[re.Match], inputText: str):
         outputText = copy.deepcopy(inputText)
         if(regexp.replace != None):
             outputText = self._generateReplaceText(
