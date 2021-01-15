@@ -24,7 +24,7 @@ class LeoRegexpApplyTool:
         return fileText
 
     def _doRegProcess(self, regexp: LeoRegexp, inputText: str):
-        outputText = copy.deepcopy(inputText)
+        outputText = inputText
         for regexpMatch in re.finditer(regexp.match, outputText, re.DOTALL):
             if(regexpMatch != None):
                 outputText = self._replaceOrNot(
@@ -32,7 +32,7 @@ class LeoRegexpApplyTool:
         return outputText
 
     def _replaceOrNot(self, regexp: LeoRegexp, regexpMatch: List[re.Match], inputText: str):
-        outputText = copy.deepcopy(inputText)
+        outputText=inputText
         if(regexp.replace != None):
             outputText = self._generateReplaceText(
                 regexp, regexpMatch, outputText)
