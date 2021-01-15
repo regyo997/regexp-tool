@@ -8,6 +8,11 @@ class LeoRegexp:
     def replace(self):
         return self._replace
 
-    def __init__(self, match: str, replace: str):
+    @property
+    def notContain(self):
+        return self._notContain
+
+    def __init__(self, match: str, replace: str, notContain: str):
         self._match = match
         self._replace = replace
+        self._notContain = notContain

@@ -17,6 +17,7 @@ regexp1 = LeoRegexpBuilder()\
 regexp2 = LeoRegexpBuilder()\
     .match("hello\w+world")\
     .ifBetween("<div>", "</div>")\
+    .thenDontContainThisAfterMatch("ddd")\
     .replaceWith("$1ABC$3")\
     .generate()
 
@@ -33,5 +34,6 @@ files = ["c:\\a.java"]
 # </div>
 # fff
 for file in files:
-    output = applyTool.apply(file, regexp0, regexp1, regexp2)
+    # output = applyTool.apply(file, regexp0, regexp1, regexp2)
+    output = applyTool.apply(file, regexp2)
     print("The result after applying regexp for file " + file + " is " + output)
