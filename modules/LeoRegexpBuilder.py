@@ -63,7 +63,7 @@ class LeoRegexpBuilder:
 
     def startsWith(self, start: str):
         self._prefix += "\s*?)("+start
-        self._concatDontContainPrifix("[\s]*?)("+start)
+        self._concatDontContainPrifix("\s*?)("+start)
         return self
 
     def endsWith(self, end: str):
