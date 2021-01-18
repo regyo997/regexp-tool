@@ -38,10 +38,9 @@ class LeoRegexpApplyTool:
 
     def _isNotUndesiredWordsContain(self, regexp: LeoRegexp, reMatch: List[re.Match]):
         isNotContain = True
-        notContainRegexp = regexp.notContain
+        dontContain = regexp.dontContain
         matchText = reMatch.group()
-        print(re.search(notContainRegexp,matchText,re.DOTALL))
-        if(notContainRegexp != None and re.search(notContainRegexp,matchText,re.DOTALL)!=None):
+        if(dontContain != "" and re.search(dontContain,matchText,re.DOTALL)!=None):
             isNotContain=False
         return isNotContain
 

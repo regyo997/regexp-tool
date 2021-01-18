@@ -9,10 +9,10 @@ class LeoRegexp:
         return self._replace
 
     @property
-    def notContain(self):
-        return self._notContain
+    def dontContain(self):
+        return self._dontContain
 
-    def __init__(self, match: str, replace: str, notContain: str):
+    def __init__(self, match: str, replace: str, dontContain: str):
         self._match = match
         self._replace = replace
-        self._notContain = notContain
+        self._dontContain = dontContain

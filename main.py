@@ -17,22 +17,25 @@ regexp1 = LeoRegexpBuilder()\
 regexp2 = LeoRegexpBuilder()\
     .match("hello\w+world")\
     .ifBetween("<div>", "</div>")\
-    .thenDontContainThisAfterMatch("ddd")\
-    .replaceWith("$1ABC$3")\
+    .thenDontContainThisAfterMatch("fff")\
+    .thenBetween("<span>","</span>")\
+    .thenDontContainThisAfterMatch("iii")\
+    .replaceWith("ABC")\
     .generate()
 
 applyTool = LeoRegexpApplyTool()
 
 # files = ["c:\\a.java", "d:\\b.jsp", "e:\\c.xml"]
 files = ["c:\\a.java"]
-# vvv a.java
 # aaa
 # <div>
 #   bbb
-#   ccchello worldddd
-#   eee
+#   ccc<span>ddd
+#   eeehelloXXXworldfff
+#   ggg</span>iii
+#   jjj
 # </div>
-# fff
+# kkk
 for file in files:
     # output = applyTool.apply(file, regexp0, regexp1, regexp2)
     output = applyTool.apply(file, regexp2)
