@@ -91,6 +91,16 @@ class LeoRegexpBuilder:
             end+self._dontContainSuffixs[i]
         return self
 
+    def thenContainThisBeforeMatch(self, containtBefore: str):
+        self._prefix += ".*?)(" + containtBefore
+        self._concatDontContainPrifix(".*?)("+containtBefore)
+        return self
+
+    def thenContainThisAfterMatch(self, containAfter: str):
+        self._suffix = containAfter + ")(.*?" + self._suffix
+        self._concatDontContainSuffix(containAfter + ")(.*?")
+        return self
+
     def thenDontContainThisBeforeMatch(self, notContainBefore: str):
         self._dontContainPrefixs.append(
             self._prefix + ".*?)(" + notContainBefore)

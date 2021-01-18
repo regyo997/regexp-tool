@@ -18,10 +18,10 @@ regexp2 = LeoRegexpBuilder()\
     .match("hello\w+world")\
     .ifBetween("<div>", "</div>")\
     .startsWith("bbb")\
-    .thenDontContainThisAfterMatch("xxx")\
+    .thenContainThisBeforeMatch("ccc")\
     .thenBetween("<span>","</span>")\
     .endsWith('ggg')\
-    .thenDontContainThisAfterMatch("xxx")\
+    .thenDontContainThisAfterMatch("fff")\
     .replaceWith("ABC")\
     .generate()
 
