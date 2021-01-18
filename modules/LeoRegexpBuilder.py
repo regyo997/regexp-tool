@@ -60,11 +60,42 @@ class LeoRegexpBuilder:
         self.appendToDontContainStrs(start, end)
         return self
 
+    def startWith(self, start: str):
+        self._prefix += "("+start+")"
+        self._appendDontContainPrifix("("+start+")")
+        return self
+
+    def endsWith(self, end: str):
+        self._suffix = "("+end+")"+self._suffix
+        self._appendDontContainSuffix("("+end+")")
+        return self
+
+    def notStartWith(self, notStart: str):
+        self._prefix += "(?!"+notStart+")"
+        self._appendDontContainPrifix("(?!"+notStart+")")
+        return self
+
+    def notEndsWith(self, notEnd: str):
+        self._suffix = "(?!"+notEnd+")"+self._suffix
+        self._appendDontContainSuffix("(?!"+notEnd+")")
+        return self
+
+    def _appendDontContainPrifix(self,start: str):
+        for i in range(len(self._dontContainPrefixs)):
+            self._dontContainPrefixs[i] += start
+        return self
+
+    def _appendDontContainSuffix(self,end: str):
+        for i in range(len(self._dontContainSuffixs)):
+            self._dontContainSuffixs[i] += end
+        return self
+        
     def appendToDontContainStrs(self, start: str, end: str):
         for i in range(len(self._dontContainPrefixs)):
             self._dontContainPrefixs[i] += "(" + start + ".*?)"
         for i in range(len(self._dontContainSuffixs)):
-            self._dontContainSuffixs[i] = "(.*?" + end + ")" + self._dontContainSuffixs[i]
+            self._dontContainSuffixs[i] = "(.*?" + \
+                end + ")" + self._dontContainSuffixs[i]
 
     def thenDontContainThisBeforeMatch(self, notContainBefore: str):
         self._dontContainPrefixs.append(
@@ -81,17 +112,24 @@ class LeoRegexpBuilder:
         return self
 
     def generate(self):
-        wholeRegexp = self._prefix + self._match + self._suffix
-        dontContain = self.generateDontContain()
-        return LeoRegexp(wholeRegexp, self._replace, dontContain)
-    
-    def generateDontContain(self):
-        dontContain = ""
+        match = self._prefix + self._match + self._suffix
+        dontMatch = self.generateDontMatch()
+        return LeoRegexp(match, self._replace, dontMatch)
+
+    def generateDontMatch(self):
+        dontMatch = ""
         for dontContainPrefix in self._dontContainPrefixs:
             dontContainPrefix = dontContainPrefix + self._match + self._suffix
-            dontContain += dontContainPrefix + "|"
+            dontMatch += dontContainPrefix + "|"
         for dontContainSuffix in self._dontContainSuffixs:
             dontContainSuffix = self._prefix + self._match + dontContainSuffix
-            dontContain += dontContainSuffix + "|"
-        dontContain=dontContain.strip("|")
-        return dontContain
+            dontMatch += dontContainSuffix + "|"
+        dontMatch = dontMatch.strip("|")
+        return dontMatch
+
+    def __str__(self):
+        return self._toString()
+
+    def toString(self):
+        match = self._prefix + self._match + self._suffix
+        return match
