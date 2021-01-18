@@ -82,6 +82,10 @@ class LeoRegexpBuilder:
 
     def generate(self):
         wholeRegexp = self._prefix + self._match + self._suffix
+        dontContain = self.generateDontContain()
+        return LeoRegexp(wholeRegexp, self._replace, dontContain)
+    
+    def generateDontContain(self):
         dontContain = ""
         for dontContainPrefix in self._dontContainPrefixs:
             dontContainPrefix = dontContainPrefix + self._match + self._suffix
@@ -90,4 +94,4 @@ class LeoRegexpBuilder:
             dontContainSuffix = self._prefix + self._match + dontContainSuffix
             dontContain += dontContainSuffix + "|"
         dontContain=dontContain.strip("|")
-        return LeoRegexp(wholeRegexp, self._replace, dontContain)
+        return dontContain
