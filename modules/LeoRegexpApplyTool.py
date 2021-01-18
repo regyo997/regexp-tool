@@ -11,11 +11,10 @@ class LeoRegexpApplyTool:
 
     def apply(self, filePath: str, *regexps: List[LeoRegexp]):
         fileText = self._readFile(filePath)
-        output = fileText
         for regexp in regexps:
             matchedTexts = self._matchAndExcludeDontMatch(fileText, regexp)
-            output = self._replace(fileText, matchedTexts, regexp.replace)
-        return output
+            fileText = self._replace(fileText, matchedTexts, regexp.replace)
+        return fileText
 
     def _readFile(self, filePath: str):
         file = open(filePath, 'r')
