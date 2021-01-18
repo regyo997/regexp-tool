@@ -14,7 +14,8 @@ class LeoRegexpApplyTool:
         fileText = self._readFile(filePath)
         output = fileText
         for regexp in regexps:
-            output = self._doRegProcess(regexp, output)
+            matchedTexts = self._matchAndExcludeDontMatch(fileText, regexp)
+            output = self._replace(fileText, matchedTexts, regexp.replace)
         return output
 
     def _readFile(self, filePath: str):
@@ -23,48 +24,22 @@ class LeoRegexpApplyTool:
         file.close()
         return fileText
 
-    def _doRegProcess(self, regexp: LeoRegexp, inputText: str):
-        outputText = inputText
-        for reMatch in re.finditer(regexp.match, outputText, re.DOTALL):
-            outputText = self._geneateOutputText(regexp, reMatch, outputText)
-        return outputText
+    def _matchAndExcludeDontMatch(self, fileText: str, regexp: LeoRegexp):
+        matchedTexts = []
+        for reMatch in re.finditer(regexp.match, fileText, re.DOTALL):
+            if(reMatch != None and self._hasNotDontMatch(reMatch.group(), regexp.dontMatch)):
+                matchedTexts.append(reMatch.group())
+        return matchedTexts
 
-    def _geneateOutputText(self, regexp: LeoRegexp, reMatch: List[re.Match], inputText: str):
-        outputText = inputText
-        if(reMatch != None and self._isNotUndesiredWordsContain(regexp,reMatch)):
-            outputText = self._replaceTextOrNot(
-                regexp, reMatch, outputText)
-        return outputText
+    def _hasNotDontMatch(self, matchedText: str, dontMatch: str):
+        hasNotDontMatch = True
+        if(dontMatch != '' and re.search(dontMatch, matchedText, re.DOTALL) != None):
+            hasNotDontMatch = False
+        return hasNotDontMatch
 
-    def _isNotUndesiredWordsContain(self, regexp: LeoRegexp, reMatch: List[re.Match]):
-        isNotContain = True
-        dontContain = regexp.dontContain
-        matchText = reMatch.group()
-        if(dontContain != "" and re.search(dontContain,matchText,re.DOTALL)!=None):
-            isNotContain=False
-        return isNotContain
-
-    def _replaceTextOrNot(self, regexp: LeoRegexp, reMatch: List[re.Match], inputText: str):
-        outputText = inputText
-        if(regexp.replace != None):
-            outputText = self._generateReplaceText(
-                regexp, reMatch, outputText)
-        return outputText
-
-    def _generateReplaceText(self, regexp: LeoRegexp, reMatch: List[re.Match], inputText: str):
-        replaceWithThisStr = self._parseDollerSignToTextStr(
-            regexp, reMatch)
-        howManyGroup = len(reMatch.groups())
-        middleMatchGroupNum = (howManyGroup//2+1)
-        matchGroupStr = reMatch.group(middleMatchGroupNum)
-        output = inputText.replace(matchGroupStr, replaceWithThisStr)
+    def _replace(self, fileText: str, matchedTexts: List[str], replace: str):
+        output = copy.deepcopy(fileText)
+        for matchedText in matchedTexts:
+            if(replace != None):
+                output = output.replace(matchedText, replace, 1)
         return output
-
-    def _parseDollerSignToTextStr(self, regexp: LeoRegexp, reMatch: List[re.Match]):
-        finishParsedReplaceStr = regexp.replace
-        howManyGroup = len(reMatch.groups())
-        for groupNum in range(howManyGroup, 0, -1):
-            groupText = reMatch.group(groupNum)
-            finishParsedReplaceStr = finishParsedReplaceStr.replace(
-                '$'+str(groupNum), groupText)
-        return finishParsedReplaceStr

@@ -17,9 +17,11 @@ regexp1 = LeoRegexpBuilder()\
 regexp2 = LeoRegexpBuilder()\
     .match("hello\w+world")\
     .ifBetween("<div>", "</div>")\
-    .thenDontContainThisAfterMatch("fff")\
+    .startsWith("bbb")\
+    .thenDontContainThisAfterMatch("xxx")\
     .thenBetween("<span>","</span>")\
-    .thenDontContainThisAfterMatch("iii")\
+    .endsWith('ggg')\
+    .thenDontContainThisAfterMatch("xxx")\
     .replaceWith("ABC")\
     .generate()
 
@@ -36,6 +38,8 @@ files = ["c:\\a.java"]
 #   jjj
 # </div>
 # kkk
+print(regexp0.toString())
+print(str(regexp1))
 for file in files:
     # output = applyTool.apply(file, regexp0, regexp1, regexp2)
     output = applyTool.apply(file, regexp2)
