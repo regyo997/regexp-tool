@@ -39,7 +39,7 @@ class LeoRegexpApplyTool:
 
     def _replace(self, fileText: str, matchedTexts: List[str], replace: str):
         output = copy.deepcopy(fileText)
-        for matchedText in matchedTexts:
-            if(replace != None):
+        if(replace != None):
+            for matchedText in matchedTexts:
                 output = output.replace(matchedText, replace, 1)
         return output
